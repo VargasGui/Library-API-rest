@@ -17,8 +17,9 @@ class autorController {
   static async listarAutoresPorNacionalidade(req, res, next) {
     try {
       const country = req.query.nacionalidade;
-      const autoresResultado = autores.find({ nacionalidade: country });
-      console.log(autoresResultado);
+      const nacionalidadeFiltrada = new RegExp(country, "i");
+
+      const autoresResultado = autores.find({ nacionalidade: nacionalidadeFiltrada });
       if (autoresResultado.length !== 0) {
         req.resultado = autoresResultado;
         next();
