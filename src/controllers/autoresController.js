@@ -5,8 +5,9 @@ class autorController {
 
   static async listarAutores(req, res, next) {
     try {
-      const autoresResultado = await autores.find();
-      res.status(200).json(autoresResultado);
+      const listaDeAutores = autores.find();
+      req.resultado = listaDeAutores;
+      next();
     } catch (error) {
       next(error);
     }
@@ -16,13 +17,12 @@ class autorController {
   static async listarAutoresPorNacionalidade(req, res, next) {
     try {
       const country = req.query.nacionalidade;
-      const autoresResultado = await autores.find({ nacionalidade: country });
+      const autoresResultado = autores.find({ nacionalidade: country });
+      console.log(autoresResultado);
       if (autoresResultado.length !== 0) {
-        res.status(200).send(autoresResultado);
-      } else {
-        next(new ErroNotFound("Nacionalidade não encontrada!"));
+        req.resultado = autoresResultado;
+        next();
       }
-
     } catch (error) {
       next(error);
     }
@@ -81,7 +81,7 @@ class autorController {
       } else {
         next(new ErroNotFound("Id do autor não encontrado!"));
       }
-      
+
     } catch (error) {
       next(error);
     }
